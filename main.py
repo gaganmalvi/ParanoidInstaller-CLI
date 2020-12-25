@@ -19,6 +19,26 @@ def getDeviceCodename():
     result = subprocess.run(['adb', 'shell', 'getprop', 'ro.build.product'], stdout=subprocess.PIPE).stdout.decode('utf-8')
     print('The connected device is: ', result)
 
+def FastbootROMFlash():
+    # UNTESTED FUNCTION!
+    print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. IT MIGHT RENDER YOUR DEVICE UNUSABLE IF YOU DO SOMETHING WRONG.')
+    print('THIS FUNCTION WILL ONLY WORK ON A-ONLY DEVICES!')
+    print('MAKE SURE YOU HAVE THE CORRECT IMAGES, CHECK CODENAMES BEFORE FLASH.')
+    x = input('Are you sure to continue? (Y/N)')
+    if x.capitalize() == 'Y':
+        print('Running ROM installation, do not unplug your device or power it off.')
+        result = subprocess.run(['adb','reboot','bootloader'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        print(result)
+        input('Press enter if you are sure to continue with the process. THE CHANGES MADE ARE IRREVERSIBLE.')
+        subprocess.run(['fastboot', 'flash', 'boot', 'boot.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        subprocess.run(['fastboot', 'flash', 'recovery', 'recovery.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        subprocess.run(['fastboot', 'flash', 'system', 'system.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        subprocess.run(['fastboot', 'flash', 'system', 'vendor.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        print('ROM successfully flashed via fastboot, if the device does not reboot, manually reboot to system.')
+        Intro()
+    else:
+        Intro()
+
 def ROMInstall():
     getDeviceCodename()
     print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. DO YOU WANT TO CONTINUE?')
@@ -128,5 +148,6 @@ print('''/¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 |     <             O		 =	|
 \_______________________________________/ \n''')
 Intro()
+
 
     
