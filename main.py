@@ -37,8 +37,8 @@ def ROMInstall():
     else:
         Intro()
 
-
 def RcvryInstall():
+    getDeviceCodename()
     print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. DO YOU WANT TO CONTINUE?')
     x = input('Are you sure to continue? (Y/N)')
     if x.capitalize() == 'Y':    
@@ -95,6 +95,38 @@ def Intro():
     else:
         Intro()
 
+print('''/¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\\
+|                   O                   |
+| |¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯| |
+| |                                   | |
+| |				      | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |               Cartel              | |
+| |              Installer            | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |                                   | |
+| |___________________________________| |
+|					|
+|     <             O		 =	|
+\_______________________________________/ \n''')
 Intro()
 
     
