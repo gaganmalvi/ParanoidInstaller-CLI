@@ -1,3 +1,13 @@
+'''
+Copyright (C) 2020 Gagan Malvi
+Licensed under the Cartel Project Public License available at
+https://github.com/CartelProject/CPL
+All rights reserved
+I am hereby NOT responsible for any damage caused whatsoever by this tool
+and you're solely responsible because you decided to use it in the first 
+place. So if you scream at me, I will laugh at you.
+'''
+
 import urllib.request as r
 import subprocess
 
