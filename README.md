@@ -29,12 +29,12 @@ python3 main.py
 
 ### Issues and Caution
 - Works only on A-only QCOM devices at the moment that have fastboot and ADB
-- A/B, dynamic partitioning support untested and unknown
+- Dynamic partitioned A-only devices may work, it's untested and not recommended (if you have specifically tested it, you can let me know at the email at the bottom of the README)
 - Specifically tested on my device: Xiaomi Redmi Note 4X (mido)
 
 ### In The Future
 - Will add support for fastboot flashing IMGs for system, vendor, odm and other partitions respectively.
-- Will add support for Dynamic partitioned devices and A/B partitioned devices including automatic-detection of what partitioning method does the device use.
+- Will add support for A/B partitioned devices.
 - Automatic downloads of ROMs using the codename itself.
 
 ##### If you like my work, please consider donating. 
