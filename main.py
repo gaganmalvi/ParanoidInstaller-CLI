@@ -17,10 +17,14 @@ def downloadFile(link, path):
 
 def getDeviceCodename():
     result = subprocess.run(['adb', 'shell', 'getprop', 'ro.build.product'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-    print('The connected device is: ', result)
+    return result
+
+def readCodeName():
+    f = open("properties.cartel")
+    return(f.read())
 
 def FastbootROMFlash():
-    # UNTESTED FUNCTION!
+    print('Current device: ',getDeviceCodename())
     print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. IT MIGHT RENDER YOUR DEVICE UNUSABLE IF YOU DO SOMETHING WRONG.')
     print('THIS FUNCTION WILL ONLY WORK ON A-ONLY DEVICES!')
     print('MAKE SURE YOU HAVE THE CORRECT IMAGES, CHECK CODENAMES BEFORE FLASH.')
@@ -38,7 +42,7 @@ def FastbootROMFlash():
         Intro()
     else:
         Intro()
-
+        
 def ROMInstall():
     getDeviceCodename()
     print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. DO YOU WANT TO CONTINUE?')
@@ -58,7 +62,7 @@ def ROMInstall():
         Intro()
 
 def RcvryInstall():
-    getDeviceCodename()
+    print('The device is: ',getDeviceCodename())
     print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. DO YOU WANT TO CONTINUE?')
     x = input('Are you sure to continue? (Y/N)')
     if x.capitalize() == 'Y':    
@@ -88,14 +92,15 @@ def Intro():
     print('Cartel ROM Installer')
     print('====================\n')
     print('A simple ROM installer for Android devices that are supported by the Cartel Project.\n')
-    getDeviceCodename()
+    print('Device: ',getDeviceCodename())
     print('Select your choice:\n')
     print(' [1] Install Cartel ROM.')
     print(' [2] Install a compatible recovery.')
     print(' [3] Download Cartel ROM from a mirror of your choice.')
+    print(' [4] Install Cartel ROM via Fastboot images. ')
     # TODO: Download files automatically by checking the codename of the device using getDeviceCodename()
-    print(' [4] Exit')
-    userInput = int(input('Enter your selection [1/2/3]:'))
+    print(' [5] Exit')
+    userInput = int(input('Enter your selection:'))
     if userInput == 1:
         ROMInstall()
     elif userInput == 2:
@@ -107,6 +112,8 @@ def Intro():
         path = 'rom.zip'
         downloadFile(url,path)
     elif userInput == 4:
+        FastbootROMFlash()
+    elif userInput == 5:
         x = input('Are you sure to exit? (Y/N)')
         if x.capitalize() == 'Y':
             exit()
