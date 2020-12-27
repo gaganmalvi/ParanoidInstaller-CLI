@@ -1,5 +1,5 @@
-# Cartel Installer
-##### An easy-to-use, plug-and-play custom ROM and zip installer for noobs.
+# ParanoidInstaller
+##### An easy-to-use, plug-and-play AOSPA installer.
 Language: Python 3.8.x <br>
 Platform: Linux/Windows/macOS
 ```
@@ -13,13 +13,13 @@ Platform: Linux/Windows/macOS
 ### Installation:
 - Clone this repository to your desired location.
 ``` 
-git clone https://github.com/gaganmalvi/cartel_installer cartel
+git clone https://github.com/gaganmalvi/ParanoidInstaller aospainstall
 ```
 - Install Android SDK tools on Linux/macOS (we already ship Windows executables.) A simple Google search can help you out.
 - If you have not installed Python yet, install Python 3.8.x or above on your PC.
 - Run the following command to run the Python script:
 ```
-python3 main.py
+python3 aospainstall/main.py
 ```
 
 ### Features:

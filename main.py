@@ -22,29 +22,9 @@ def getDeviceCodename():
 def readCodeName():
     f = open("properties.cartel")
     return(f.read())
-
-def FastbootROMFlash():
-    print('Current device: ',getDeviceCodename())
-    print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. IT MIGHT RENDER YOUR DEVICE UNUSABLE IF YOU DO SOMETHING WRONG.')
-    print('THIS FUNCTION WILL ONLY WORK ON A-ONLY DEVICES!')
-    print('MAKE SURE YOU HAVE THE CORRECT IMAGES, CHECK CODENAMES BEFORE FLASH.')
-    x = input('Are you sure to continue? (Y/N)')
-    if x.capitalize() == 'Y':
-        print('Running ROM installation, do not unplug your device or power it off.')
-        result = subprocess.run(['adb','reboot','bootloader'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-        print(result)
-        input('Press enter if you are sure to continue with the process. THE CHANGES MADE ARE IRREVERSIBLE.')
-        subprocess.run(['fastboot', 'flash', 'boot', 'boot.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-        subprocess.run(['fastboot', 'flash', 'recovery', 'recovery.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-        subprocess.run(['fastboot', 'flash', 'system', 'system.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-        subprocess.run(['fastboot', 'flash', 'system', 'vendor.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-        print('ROM successfully flashed via fastboot, if the device does not reboot, manually reboot to system.')
-        Intro()
-    else:
-        Intro()
         
 def ROMInstall():
-    getDeviceCodename()
+    print('Device connected:',getDeviceCodename().strip())
     print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. DO YOU WANT TO CONTINUE?')
     x = input('Are you sure to continue? (Y/N)')
     if x.capitalize() == 'Y':
@@ -88,18 +68,16 @@ def RcvryInstall():
         Intro()
 
 def Intro():
-    print('====================')
-    print('Cartel ROM Installer')
-    print('====================\n')
-    print('A simple ROM installer for Android devices that are supported by the Cartel Project.\n')
+    print('=====================')
+    print('  ParanoidInstaller')
+    print('=====================\n')
+    print('The easiest way to get Paranoid Android on your device!\n')
     print('Device: ',getDeviceCodename())
     print('Select your choice:\n')
-    print(' [1] Install Cartel ROM.')
-    print(' [2] Install a compatible recovery.')
-    print(' [3] Download Cartel ROM from a mirror of your choice.')
-    print(' [4] Install Cartel ROM via Fastboot images. ')
+    print(' [1] Install Paranoid Android')
+    print(' [2] Install PA Recovery')
     # TODO: Download files automatically by checking the codename of the device using getDeviceCodename()
-    print(' [5] Exit')
+    print(' [3] Exit')
     userInput = int(input('Enter your selection:'))
     if userInput == 1:
         ROMInstall()
@@ -108,12 +86,6 @@ def Intro():
         input('Press any key to continue...')
         RcvryInstall()
     elif userInput == 3:
-        url = input('Enter URL of file: ')
-        path = 'rom.zip'
-        downloadFile(url,path)
-    elif userInput == 4:
-        FastbootROMFlash()
-    elif userInput == 5:
         x = input('Are you sure to exit? (Y/N)')
         if x.capitalize() == 'Y':
             exit()
@@ -136,7 +108,7 @@ print('''/¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
 | |                                   | |
 | |                                   | |
 | |                                   | |
-| |               Cartel              | |
+| |                AOSPA              | |
 | |              Installer            | |
 | |                                   | |
 | |                                   | |
