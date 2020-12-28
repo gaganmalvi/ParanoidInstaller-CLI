@@ -16,6 +16,7 @@ import urllib.request as r
 import subprocess
 import json
 from tqdm import tqdm
+from collections import OrderedDict 
 
 class DownloadProgressBar(tqdm):
     def update_to(self, b=1, bsize=1, tsize=None):
@@ -23,11 +24,14 @@ class DownloadProgressBar(tqdm):
             self.total = tsize
         self.update(b * bsize - self.n)
 
-def downloadFile(url, output_path):
-    print('Beginning download...')
-    with DownloadProgressBar(unit='B', unit_scale=True,
-                             miniters=1, desc=url.split('/')[-1]) as t:
-        r.urlretrieve(url, filename=output_path, reporthook=t.update_to)
+def downloadFile(url, output_path, silent = False):
+    if silent:
+        r.urlretrieve(url, filename=output_path)
+    else:
+        print('Beginning download...')
+        with DownloadProgressBar(unit='B', unit_scale=True,
+                                 miniters=1, desc=url.split('/')[-1]) as t:
+            r.urlretrieve(url, filename=output_path, reporthook=t.update_to)
 
 def getDeviceCodename():
     result = subprocess.run(['adb', 'shell', 'getprop', 'ro.product.vendor.device'], stdout=subprocess.PIPE).stdout.decode('utf-8')
@@ -37,19 +41,43 @@ def isAbDevice():
     result = subprocess.run(['adb', 'shell', 'getprop', 'ro.boot.slot_suffix"'], stdout=subprocess.PIPE).stdout.decode('utf-8')
     return result.strip() is not None
 
-def downloadLatestRelease():
-    dl = 'http://api.aospa.co/updates/'+getDeviceCodename()
-    downloadFile(dl,'pa.json')
+def getPaDevices():
+    devices = OrderedDict()
+    dl = 'http://api.aospa.co/devices'
+    downloadFile(dl,'devices.json', True)
+    with open("devices.json") as f:
+        djson = json.load(f)
+        for i in range(len(djson["devices"])):
+            devices[djson["devices"][i]["name"]] = djson["devices"][i]["description"]
+    
+    return devices
+    
+def downloadLatestRelease(codename):
+    dl = 'http://api.aospa.co/updates/'+codename
+    downloadFile(dl,'pa.json', True)
     with open('pa.json') as f:
         device = json.load(f)
-        event = max(device['updates'], key=lambda ev: ev['version'])
+        try: event = max(device['updates'], key=lambda ev: ev['version'])
+        except ValueError:
+            paDevices = getPaDevices()
+            print("Codename %s not found in PA releases! We support the following devices:" % codename)
+            for i in range(len(paDevices)):
+                codename = list(paDevices.items())[i][0]
+                print(" [%d] %s - %s" % (i+1, codename, paDevices[codename]))
+            try: chosen = int(input("Choose your device or hit enter to exit: ")) - 1
+            except ValueError: exit()
+            if chosen not in range(len(paDevices)):
+                print("Invalid choice!")
+                exit()
+            else:
+                downloadLatestRelease(list(paDevices.items())[chosen][0])
         downloadURL = event.get('url')
         print('Downloading latest PA release...')
         downloadFile(downloadURL,'pa.zip')
         
 def ROMInstall():
     print('Device connected:',getDeviceCodename())
-    downloadLatestRelease()
+    downloadLatestRelease(getDeviceCodename())
     print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. DO YOU WANT TO CONTINUE?')
     x = input('Are you sure to continue? (Y/N)')
     if x.capitalize() == 'Y':
@@ -97,7 +125,7 @@ def Intro():
     print(' [2] Install PA Recovery')
     # TODO: Download files automatically by checking the codename of the device using getDeviceCodename()
     print(' [3] Exit')
-    userInput = int(input('Enter your selection:'))
+    userInput = int(input('Enter your selection: '))
     if userInput == 1:
         ROMInstall()
     elif userInput == 2:
