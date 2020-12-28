@@ -30,9 +30,17 @@ def getDeviceCodename():
     return result.strip()
 
 def isAbDevice():
-    result = subprocess.run(['adb', 'shell', 'getprop', 'ro.boot.slot_suffix"'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+    result = subprocess.run(['adb', 'shell', 'getprop', 'ro.boot.slot_suffix'], stdout=subprocess.PIPE).stdout.decode('utf-8')
     return result.strip() is not None
-    
+
+def isAbDeviceFastboot():
+    result = subprocess.run(['fastboot', 'getvar', 'slot-count'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+    return result.strip() is not None
+
+def isDynamic():
+    result = subprocess.run(['fastboot', 'getvar', 'has-slot:system'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+    return result.strip() == "yes"
+
 def readCodeName():
     f = open("properties.cartel")
     return(f.read())
