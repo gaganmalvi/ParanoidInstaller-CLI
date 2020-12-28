@@ -45,19 +45,25 @@ def isDynamic():
     result = subprocess.run(['fastboot', 'getvar', 'has-slot:system'], stdout=subprocess.PIPE).stdout.decode('utf-8')
     return result.strip() == "yes"
 
-def downloadLatestRelease():
-    dl = 'http://api.aospa.co/updates/'+getDeviceCodename()
+def downloadLatestRelease(codename):
+    dl = 'http://api.aospa.co/updates/'+codename
     downloadFile(dl,'pa.json')
     with open('pa.json') as f:
         device = json.load(f)
-        event = max(device['updates'], key=lambda ev: ev['version'])
+        try: event = max(device['updates'], key=lambda ev: ev['version'])
+        except ValueError:
+            if input("Codename %s not found in PA releases! Do you want to enter a different codename? (Y/N): " % codename).upper() == "Y":
+                downloadLatestRelease(input("Enter the codename: "))
+            else:
+                print('Goodbye!')
+                exit()
         downloadURL = event.get('url')
         print('Downloading latest PA release...')
         downloadFile(downloadURL,'pa.zip')
         
 def ROMInstall():
     print('Device connected:',getDeviceCodename())
-    downloadLatestRelease()
+    downloadLatestRelease(getDeviceCodename())
     print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. DO YOU WANT TO CONTINUE?')
     x = input('Are you sure to continue? (Y/N)')
     if x.capitalize() == 'Y':
