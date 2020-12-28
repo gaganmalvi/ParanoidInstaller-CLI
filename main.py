@@ -1,12 +1,16 @@
-'''
-Copyright (C) 2020 Gagan Malvi
-Licensed under the Cartel Project Public License available at
-https://github.com/CartelProject/CPL
-All rights reserved
-I am hereby NOT responsible for any damage caused whatsoever by this tool
-and you're solely responsible because you decided to use it in the first 
-place. So if you scream at me, I will laugh at you.
-'''
+# Copyright (C) 2020 Paranoid Android
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import urllib.request as r
 import subprocess
@@ -41,10 +45,6 @@ def isDynamic():
     result = subprocess.run(['fastboot', 'getvar', 'has-slot:system'], stdout=subprocess.PIPE).stdout.decode('utf-8')
     return result.strip() == "yes"
 
-def readCodeName():
-    f = open("properties.cartel")
-    return(f.read())
-
 def downloadLatestRelease():
     dl = 'http://api.aospa.co/updates/'+getDeviceCodename()
     downloadFile(dl,'pa.json')
@@ -62,7 +62,7 @@ def ROMInstall():
     x = input('Are you sure to continue? (Y/N)')
     if x.capitalize() == 'Y':
         print('Running ROM installation, do not unplug your device or power it off.')
-        result = subprocess.run(['adb', 'reboot', 'sideload'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        result = subprocess.run(['adb', 'reboot', 'sideload-auto-reboot'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         print(result)
         print('STORE THE ROM ZIP IN THE DIRECTORY OF THE SCRIPT, OTHERWISE THE SCRIPT WILL FAIL.')
         input('Once you see device rebooting to recovery, press enter.')
