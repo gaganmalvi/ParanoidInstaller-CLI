@@ -11,10 +11,19 @@ place. So if you scream at me, I will laugh at you.
 import urllib.request as r
 import subprocess
 import json
+from tqdm import tqdm
 
-def downloadFile(link, path):
+class DownloadProgressBar(tqdm):
+    def update_to(self, b=1, bsize=1, tsize=None):
+        if tsize is not None:
+            self.total = tsize
+        self.update(b * bsize - self.n)
+
+def downloadFile(url, output_path):
     print('Beginning download...')
-    r.urlretrieve(link, path)
+    with DownloadProgressBar(unit='B', unit_scale=True,
+                             miniters=1, desc=url.split('/')[-1]) as t:
+        r.urlretrieve(url, filename=output_path, reporthook=t.update_to)
 
 def getDeviceCodename():
     result = subprocess.run(['adb', 'shell', 'getprop', 'ro.build.product'], stdout=subprocess.PIPE).stdout.decode('utf-8')
