@@ -10,21 +10,33 @@ place. So if you scream at me, I will laugh at you.
 
 import urllib.request as r
 import subprocess
+import json
 
 def downloadFile(link, path):
-    print('Beginning download of ROM...')
+    print('Beginning download...')
     r.urlretrieve(link, path)
 
 def getDeviceCodename():
     result = subprocess.run(['adb', 'shell', 'getprop', 'ro.build.product'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-    return result
+    return result.strip()
 
 def readCodeName():
     f = open("properties.cartel")
     return(f.read())
+
+def downloadLatestRelease():
+    dl = 'http://api.aospa.co/updates/'+getDeviceCodename()
+    downloadFile(dl,'pa.json')
+    with open('pa.json') as f:
+        device = json.load(f)
+        event = max(device['updates'], key=lambda ev: ev['version'])
+        downloadURL = event.get('url')
+        print('Downloading latest PA release...')
+        downloadFile(downloadURL,'pa.zip')
         
 def ROMInstall():
-    print('Device connected:',getDeviceCodename().strip())
+    print('Device connected:',getDeviceCodename())
+    downloadLatestRelease()
     print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. DO YOU WANT TO CONTINUE?')
     x = input('Are you sure to continue? (Y/N)')
     if x.capitalize() == 'Y':
@@ -33,8 +45,7 @@ def ROMInstall():
         print(result)
         print('STORE THE ROM ZIP IN THE DIRECTORY OF THE SCRIPT, OTHERWISE THE SCRIPT WILL FAIL.')
         input('Once you see device rebooting to recovery, press enter.')
-        name = input('Enter ROM zip filename: ') # Should be saved as rom.zip if it is downloaded by the downloadFile function
-        result = subprocess.run(['adb', 'sideload', name], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        result = subprocess.run(['adb', 'sideload', 'pa.zip'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         print(result)
         print('ROM successfully sideloaded, if the device does not reboot, manually reboot to system.')
         Intro()
@@ -72,7 +83,7 @@ def Intro():
     print('  ParanoidInstaller')
     print('=====================\n')
     print('The easiest way to get Paranoid Android on your device!\n')
-    print('Device: ',getDeviceCodename())
+    print('Device:',getDeviceCodename())
     print('Select your choice:\n')
     print(' [1] Install Paranoid Android')
     print(' [2] Install PA Recovery')
