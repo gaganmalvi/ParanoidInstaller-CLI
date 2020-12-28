@@ -17,6 +17,10 @@ git clone https://github.com/gaganmalvi/ParanoidInstaller aospainstall
 ```
 - Install Android SDK tools on Linux/macOS (we already ship Windows executables.) A simple Google search can help you out.
 - If you have not installed Python yet, install Python 3.8.x or above on your PC.
+- Before running the command below, make sure to install all requirements by running:
+```
+pip3 install -r requirements.txt
+```
 - Run the following command to run the Python script:
 ```
 python3 aospainstall/main.py
