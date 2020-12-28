@@ -30,7 +30,7 @@ def downloadFile(url, output_path):
         r.urlretrieve(url, filename=output_path, reporthook=t.update_to)
 
 def getDeviceCodename():
-    result = subprocess.run(['adb', 'shell', 'getprop', 'ro.build.product'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+    result = subprocess.run(['adb', 'shell', 'getprop', 'ro.product.vendor.device'], stdout=subprocess.PIPE).stdout.decode('utf-8')
     return result.strip()
 
 def isAbDevice():
