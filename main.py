@@ -29,6 +29,10 @@ def getDeviceCodename():
     result = subprocess.run(['adb', 'shell', 'getprop', 'ro.build.product'], stdout=subprocess.PIPE).stdout.decode('utf-8')
     return result.strip()
 
+def isAbDevice():
+    result = subprocess.run(['adb', 'shell', 'getprop', 'ro.boot.slot_suffix"'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+    return result.strip() is not None
+    
 def readCodeName():
     f = open("properties.cartel")
     return(f.read())
@@ -69,7 +73,11 @@ def RcvryInstall():
         print('Running Recovery installation, do not unplug your device or power it off')
         result = subprocess.run(['adb', 'reboot', 'bootloader'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         input('Once device has reached bootloader state, press enter to continue')
-        result = subprocess.run(['fastboot', 'flash', 'recovery', 'recovery.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        if isAbDevice():
+            recovery_partition = 'boot'
+        else:
+            recovery_partition = 'recovery'
+        result = subprocess.run(['fastboot', 'flash', recovery_partition, 'recovery.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         userInput = input('Do you want to boot to recovery or proceed to reboot to system? [Y/N]')
         if userInput.capitalize() == "Y":
             print('Booting to recovery...')
