@@ -79,18 +79,9 @@ def RcvryInstall():
             recovery_partition = 'recovery'
         result = subprocess.run(['fastboot', 'flash', recovery_partition, 'recovery.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         userInput = input('Do you want to boot to recovery or proceed to reboot to system? [Y/N]')
-        if userInput.capitalize() == "Y":
-            print('Booting to recovery...')
-            result = subprocess.run(['fastboot', 'boot', 'recovery.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-            print(result)
-            print('Successfully booted to recovery.')
-        elif userInput.capitalize() == "N":
-            print('Booting to system...')
-            result = subprocess.run(['fastboot', 'reboot'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-            print(result)
-            print('Successfully booted to system.')
-        else:
-            print('Wrong choice.')
+        print('Booting to system...')
+        result = subprocess.run(['fastboot', 'reboot'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        print('Booting...')
         Intro()
     else:
         Intro()
