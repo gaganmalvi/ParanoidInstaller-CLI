@@ -50,7 +50,7 @@ def ROMInstall():
     x = input('Are you sure to continue? (Y/N)')
     if x.capitalize() == 'Y':
         print('Running ROM installation, do not unplug your device or power it off.')
-        result = subprocess.run(['adb', 'reboot', 'sideload'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        result = subprocess.run(['adb', 'reboot', 'sideload-auto-reboot'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         print(result)
         print('STORE THE ROM ZIP IN THE DIRECTORY OF THE SCRIPT, OTHERWISE THE SCRIPT WILL FAIL.')
         input('Once you see device rebooting to recovery, press enter.')
