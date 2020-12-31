@@ -74,7 +74,24 @@ def downloadLatestRelease(codename):
         downloadURL = event.get('url')
         print('Downloading latest PA release...')
         downloadFile(downloadURL,'pa.zip')
-        
+
+def FastbootInstall():
+    print('Device connected:',getDeviceCodename())
+    print('You are going to install Paranoid Android via fastboot, any changes made are irreversible!')
+    x = input('Do you wish to continue? [Y/N]')
+    if x.capitalize() == 'Y':
+        print('Rebooting to fastboot...')
+        subprocess.run(['adb', 'reboot', 'bootloader'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        input('Press return when the device has rebooted to bootloader')
+        subprocess.run(['fastboot','update','rom.zip'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        print('ROM successfully flashed.')
+        input('Press return to reboot to system.')
+        rsubprocess.run(['fastboot', 'reboot'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        Intro()
+    else:
+        print('Wrong option.')
+        Intro()
+
 def ROMInstall():
     print('Device connected:',getDeviceCodename())
     downloadLatestRelease(getDeviceCodename())
@@ -88,7 +105,7 @@ def ROMInstall():
         input('Once you see device rebooting to recovery, press enter.')
         result = subprocess.run(['adb', 'sideload', 'pa.zip'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         print(result)
-        print('ROM successfully sideloaded, if the device does not reboot, manually reboot to system.')
+        print('ROM successfully sideloaded.')
         Intro()
     else:
         Intro()
