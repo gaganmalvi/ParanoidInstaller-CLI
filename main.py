@@ -101,6 +101,23 @@ def ROMInstall():
         print('Running ROM installation, do not unplug your device or power it off.')
         result = subprocess.run(['adb', 'reboot', 'sideload-auto-reboot'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         print(result)
+        input('Once you see device rebooting to recovery, press enter.')
+        result = subprocess.run(['adb', 'sideload', 'pa.zip'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        print(result)
+        print('ROM successfully sideloaded.')
+        Intro()
+    else:
+        Intro()
+
+def LocalROMInstall():
+    print('Device connected:',getDeviceCodename())
+    print('Save the ROM zip in the root directory of the installer as pa.zip')
+    print('THIS ACTION WILL POTENTIALLY BREAK AND DELETE PARTITIONS AND ITS CONTENTS. DO YOU WANT TO CONTINUE?')
+    x = input('Are you sure to continue? (Y/N)')
+    if x.capitalize() == 'Y':
+        print('Running ROM installation, do not unplug your device or power it off.')
+        result = subprocess.run(['adb', 'reboot', 'sideload-auto-reboot'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+        print(result)
         print('STORE THE ROM ZIP IN THE DIRECTORY OF THE SCRIPT, OTHERWISE THE SCRIPT WILL FAIL.')
         input('Once you see device rebooting to recovery, press enter.')
         result = subprocess.run(['adb', 'sideload', 'pa.zip'], stdout=subprocess.PIPE).stdout.decode('utf-8')
@@ -109,6 +126,7 @@ def ROMInstall():
         Intro()
     else:
         Intro()
+
 
 def RcvryInstall():
     print('The device is: ',getDeviceCodename())
@@ -138,18 +156,20 @@ def Intro():
     print('The easiest way to get Paranoid Android on your device!\n')
     print('Device:',getDeviceCodename())
     print('Select your choice:\n')
-    print(' [1] Install Paranoid Android')
-    print(' [2] Install PA Recovery')
-    # TODO: Download files automatically by checking the codename of the device using getDeviceCodename()
-    print(' [3] Exit')
+    print(' [1] Install Paranoid Android using the Internet.')
+    print(' [2] Install Paranoid Android from local ZIP.')
+    print(' [3] Install Paranoid Android Recovery.')
+    print(' [4] Exit')
     userInput = int(input('Enter your selection: '))
     if userInput == 1:
         ROMInstall()
     elif userInput == 2:
+        LocalROMInstall()
+    elif userInput == 3:
         print('Store recovery IMG as recovery.img in root directory of the script.')
         input('Press any key to continue...')
         RcvryInstall()
-    elif userInput == 3:
+    elif userInput == 4:
         x = input('Are you sure to exit? (Y/N)')
         if x.capitalize() == 'Y':
             exit()
