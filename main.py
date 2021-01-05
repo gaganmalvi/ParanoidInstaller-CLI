@@ -141,7 +141,6 @@ def RcvryInstall():
         else:
             recovery_partition = 'recovery'
         result = subprocess.run(['fastboot', 'flash', recovery_partition, 'recovery.img'], stdout=subprocess.PIPE).stdout.decode('utf-8')
-        userInput = input('Do you want to boot to recovery or proceed to reboot to system? [Y/N]')
         print('Booting to system...')
         result = subprocess.run(['fastboot', 'reboot'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         print('Booting...')
