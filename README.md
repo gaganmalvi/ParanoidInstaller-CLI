@@ -1,4 +1,4 @@
-# ParanoidInstaller
+![ParanoidInstaller](/art/paranoidinstaller.jpg)
 ##### An easy-to-use, plug-and-play AOSPA installer.
 Language: Python 3.8.x <br>
 Platform: Linux/Windows/macOS
