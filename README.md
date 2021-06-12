@@ -11,6 +11,7 @@ Platform: Linux/Windows/macOS
  */
 ```
 ### Installation:
+- Install Google Platform Tools from ![here](https://developer.android.com/studio/releases/platform-tools) to PATH.
 - Clone this repository to your desired location.
 ``` 
 git clone https://github.com/gaganmalvi/ParanoidInstaller aospainstall
@@ -42,4 +43,4 @@ python3 aospainstall/main.py
 - Automatic downloads of ROMs using the codename itself.
 
 ##### If you like my work, please consider donating. 
-###### Support email: college@malvi.ml
+###### Support email: malvi@aospa.co
